@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.Swagger;
+using TripTracker.Service.Models;
 
 namespace TripTracker.Service
 {
@@ -25,12 +27,26 @@ namespace TripTracker.Service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<Repository>();
             services.AddControllers();
+
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+
+            if (env.IsDevelopment() || env.IsStaging())
+            {
+
+                app.UseSwaggerUI(options =>
+                        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Trip Tracker v1")
+                );
+
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -11,10 +11,10 @@ namespace TripTracker.Service.Models
 
         public int TripId { get; set; }
 
-        public string Name { get; set; }
+        public string Descripton { get; set; }
 
-        public DateTime Start { get; set; }
+        public DateTimeOffset Start { get; set; }
 
-        public DateTime End { get; set; }
+        public DateTimeOffset End { get; set; }
     }
 }
