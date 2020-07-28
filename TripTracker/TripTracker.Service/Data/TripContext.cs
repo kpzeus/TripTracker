@@ -12,6 +12,11 @@ namespace TripTracker.Service.Data
 	{
 		public DbSet<Trip> Trips { get; set; }
 
+		public TripContext()
+        {
+
+        }
+
 		public TripContext(DbContextOptions<TripContext> options)
 		: base(options) { }
 
