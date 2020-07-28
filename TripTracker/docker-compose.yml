@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  triptracker.service:
+    image: ${DOCKER_REGISTRY-}triptrackerservice
+    build:
+      context: .
+      dockerfile: TripTracker.Service/Dockerfile
+
+  triptracker.ui:
+    image: ${DOCKER_REGISTRY-}triptrackerui
+    build:
+      context: .
+      dockerfile: TripTracker.UI/Dockerfile
+

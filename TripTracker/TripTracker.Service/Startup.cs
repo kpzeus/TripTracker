@@ -59,7 +59,7 @@ namespace TripTracker.Service
 
             TripContext.SeedData(app.ApplicationServices);
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
