@@ -9,7 +9,10 @@ services:
 
   triptracker.ui:
     image: ${DOCKER_REGISTRY-}triptrackerui
+    environment:
+      - serviceUrl=http://triptracker.service
     build:
       context: .
       dockerfile: TripTracker.UI/Dockerfile
-
+    links:
+      - triptracker.service
