@@ -15,8 +15,8 @@ namespace TripTracker.Service.Models
             { 
                 Id= 1,
                 Name = "KP Trip",
-                Start = DateTime.Now,
-                End = DateTime.Now.AddDays(3)
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(3)
             });
         }
     }

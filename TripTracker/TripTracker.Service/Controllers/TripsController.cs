@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TripTracker.Service.Data;
 using TripTracker.Service.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,47 +15,78 @@ namespace TripTracker.Service.Controllers
     [ApiController]
     public class TripsController : ControllerBase
     {
-        Repository _repository;
+        TripContext _tripContext;
 
-        public TripsController(Repository repository)
+        public TripsController(TripContext tripContext)
         {
-            _repository = repository;
+            _tripContext = tripContext;
         }
 
         // GET: api/<TripsController>
         [HttpGet]
-        public IEnumerable<Trip> Get()
+        public async Task<ActionResult> GetAsync()
         {
-            return _repository.MyTrips;
+            var t = await _tripContext.Trips.AsNoTracking().ToListAsync();
+            return Ok(t);
         }
 
         // GET api/<TripsController>/5
         [HttpGet("{id}")]
         public Trip Get(int id)
         {
-            return _repository.MyTrips.FirstOrDefault(x => x.Id == id);
+            return _tripContext.Trips.Find(id);
         }
 
         // POST api/<TripsController>
         [HttpPost]
-        public void Post([FromBody] Trip value)
+        public IActionResult Post([FromBody] Trip value)
         {
-            _repository.MyTrips.Add(value);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _tripContext.Add(value);
+            _tripContext.SaveChanges();
+
+            return Ok();
         }
 
         // PUT api/<TripsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Trip value)
+        public IActionResult Put(int id, [FromBody] Trip value)
         {
-            this.Delete(value.Id);
-            _repository.MyTrips.Add(value);
+            if (!_tripContext.Trips.Any(x => x.Id == id))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _tripContext.Update(value);
+            _tripContext.SaveChanges();
+
+            return Ok();
         }
 
         // DELETE api/<TripsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
-            _repository.MyTrips.Remove(_repository.MyTrips.First(x => x.Id == id));
+            var trip = Get(id);
+
+            if (trip == null)
+            {
+                return NotFound();
+            }
+
+            _tripContext.Trips.Remove(trip);
+            _tripContext.SaveChanges();
+
+            return Ok();
         }
     }
 }
