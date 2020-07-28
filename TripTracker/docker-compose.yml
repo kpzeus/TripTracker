@@ -16,3 +16,6 @@ services:
       dockerfile: TripTracker.UI/Dockerfile
     links:
       - triptracker.service
+
+  db:
+    image: "microsoft/mssql-server-linux"
